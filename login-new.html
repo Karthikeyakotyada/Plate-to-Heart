@@ -1,195 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login - Plate to Heart</title>
+
   <style>
-    :root {
-      --brand: #00796b;
-      --brand-dark: #004d40;
-      --bg: #f4f6f8;
-      --card: #ffffff;
+    :root{
+      --bg-dark: #07141a;
+      --panel: rgba(255,255,255,0.03);
+      --glass: rgba(255,255,255,0.04);
+      --accent-1: #00bfa5;
+      --accent-2: #00796b;
+      --muted: #9aa4b2;
+      --text: #e6eef3;
+      --gold: #ffd08a;
     }
-    * { box-sizing: border-box; }
-    body { 
-      margin: 0; 
-      font-family: Arial, Helvetica, sans-serif; 
-      background: var(--bg);
-      background-image: linear-gradient(135deg, var(--bg) 0%, #e0f2f1 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+
+    /* page base */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:
+        linear-gradient(180deg, rgba(2,6,23,0.7) 0%, rgba(3,10,16,0.75) 100%),
+        radial-gradient(800px 400px at 10% 15%, rgba(0,191,165,0.06), transparent 10%),
+        radial-gradient(600px 300px at 85% 85%, rgba(0,121,107,0.04), transparent 10%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      overflow-y:auto;
     }
-    .login-container {
-      background: var(--card);
-      padding: 32px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-      width: 100%;
-      max-width: 400px;
-      animation: slideIn 0.5s ease-out;
+
+    /* subtle textured blur simulated with inline SVG noise (works offline) */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.03' fill='%23212121'/></svg>");
+      background-size:cover;
+      filter: blur(18px) saturate(0.85) contrast(1);
+      pointer-events:none;
+      z-index:0;
     }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    /* container */
+    .wrap {
+      width:100%;
+      max-width:420px;
+      z-index:10;
+      position:relative;
+      animation:pageIn .45s cubic-bezier(.2,.9,.3,1);
     }
+    @keyframes pageIn{from{opacity:0;transform:translateY(12px) scale(.995)}to{opacity:1;transform:none}}
+
+    /* glass card */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius:16px;
+      padding:28px;
+      box-shadow: 0 18px 60px rgba(2,6,23,0.6);
+      backdrop-filter: blur(8px) saturate(1.1);
+    }
+
     .logo {
-      text-align: center;
-      font-size: 32px;
-      font-weight: bold;
-      color: var(--brand);
-      margin-bottom: 24px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
     }
-    .welcome-text {
-      text-align: center;
-      color: #666;
-      margin-bottom: 32px;
-      font-size: 16px;
+    .logo .mark{
+      width:56px;height:56px;border-radius:12px;
+      display:flex;align-items:center;justify-content:center;
+      background: linear-gradient(135deg,var(--gold), rgba(255,210,138,0.8));
+      box-shadow: 0 8px 30px rgba(0,0,0,0.45), 0 2px 10px rgba(0,191,165,0.08) inset;
+      font-size:26px;
     }
-    .form-group { margin-bottom: 24px; }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      color: #333;
-      font-weight: 500;
-      font-size: 15px;
+    .logo .title{
+      font-weight:800;font-size:18px;
+      color:var(--text);
+      letter-spacing:0.2px;
     }
-    input {
-      width: 100%;
-      padding: 14px;
-      border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: all 0.2s ease;
+    .logo .subtitle{
+      font-size:12px;color:var(--muted);font-weight:600;margin-top:4px;
     }
-    input:focus {
-      outline: none;
-      border-color: var(--brand);
-      box-shadow: 0 0 0 3px rgba(0,121,107,0.1);
+
+    .welcome{
+      margin-bottom:14px;
     }
-    input::placeholder { color: #9e9e9e; }
-    .password-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
+    .welcome h1{margin:0;font-size:18px;font-weight:800}
+    .welcome p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    form { margin-top:12px }
+    .form-group { margin-bottom:14px; }
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:700}
+    input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.04);
+      background: rgba(255,255,255,0.02);
+      color:var(--text);
+      font-size:15px;
+      transition: box-shadow .18s ease, border-color .18s ease, transform .12s ease;
     }
-    .password-wrapper input {
-      padding-right: 45px;
-    }
-    .password-toggle {
-      position: absolute;
-      right: 12px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 20px;
-      color: #666;
-      padding: 0;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: color 0.2s;
-    }
-    .password-toggle:hover {
-      color: var(--brand);
-    }
-    button {
-      width: 100%;
-      padding: 16px;
-      background: var(--brand);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-top: 16px;
-      box-shadow: 0 4px 12px rgba(0,121,107,0.2);
-    }
-    button:hover {
-      background: var(--brand-dark);
+    input::placeholder{color:rgba(230,238,243,0.45)}
+    input:focus{
+      outline:none;
+      border-color: rgba(0,191,165,0.9);
+      box-shadow: 0 6px 20px rgba(0,191,165,0.06), 0 0 0 6px rgba(0,191,165,0.03);
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(0,121,107,0.25);
     }
-    button:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 8px rgba(0,121,107,0.2);
+
+    .password-wrapper{position:relative;display:flex;align-items:center}
+    .password-toggle{
+      position:absolute;right:8px;top:50%;transform:translateY(-50%);
+      background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:6px;border-radius:8px;
     }
-    .footer {
-      text-align: center;
-      margin-top: 24px;
-      color: #666;
-      font-size: 15px;
-    }
-    .footer a {
-      color: var(--brand);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-    .footer a:hover {
-      color: var(--brand-dark);
-      text-decoration: underline;
-    }
+    .password-toggle:hover{color:var(--accent-1)}
+
     .error {
-      color: #e53935;
-      margin: 16px 0;
-      display: none;
-      padding: 12px;
-      background: #ffebee;
-      border-radius: 8px;
-      font-size: 14px;
-      border-left: 4px solid #e53935;
-      animation: shake 0.5s ease-in-out;
+      display:none;
+      margin:8px 0 12px;
+      padding:10px 12px;
+      border-radius:10px;
+      background: rgba(239,68,68,0.08);
+      color:#ffb4b4;
+      border-left:4px solid rgba(239,68,68,0.9);
+      font-size:13px;
     }
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-10px); }
-      75% { transform: translateX(10px); }
+
+    .actions { display:flex; gap:12px; margin-top:8px; align-items:center; }
+    .btn {
+      padding:12px 14px;
+      border-radius:10px;
+      font-weight:800;
+      cursor:pointer;
+      border:none;
+      min-width:140px;
+    }
+    .btn.primary{
+      background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
+      color:#041014;
+      box-shadow: 0 10px 30px rgba(0,121,107,0.12);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .btn.primary:hover{ transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,121,107,0.16) }
+    .btn.ghost{
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.04);
+      color:var(--text); font-weight:700;
+    }
+
+    .footer{
+      margin-top:12px;font-size:13px;color:var(--muted);
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+    }
+    .footer a{ color:var(--accent-1); text-decoration:none; font-weight:800 }
+    .footer a:hover{ text-decoration:underline }
+
+    /* small helper */
+    .note{font-size:12px;color:var(--muted);margin-top:8px}
+
+    /* responsive */
+    @media (max-width:420px){
+      .wrap{padding:8px}
+      .card{padding:18px}
     }
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <div class="logo">🍽️ Plate to Heart</div>
-    <div class="welcome-text">Welcome back! Please login to continue.</div>
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" required placeholder="Enter your email" autocomplete="email">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="password-wrapper">
-          <input type="password" id="password" required placeholder="Enter your password">
-          <button type="button" class="password-toggle" onclick="togglePassword('password')" aria-label="Toggle password visibility">
-            👁️
-          </button>
+  <div class="wrap">
+    <div class="card" role="main" aria-labelledby="loginTitle">
+      <div class="logo" aria-hidden="true">
+        <div class="mark">🍽</div>
+        <div>
+          <div class="title">Plate to Heart</div>
+          <div class="subtitle">Community • Reduce Waste • Help</div>
         </div>
       </div>
-      <div id="errorMessage" class="error"></div>
-      <button type="submit">Login to Dashboard</button>
-    </form>
-    <div class="footer">
-      New to Plate to Heart? <a href="register.html">Create an account</a>
+
+      <div class="welcome">
+        <h1 id="loginTitle">Welcome back</h1>
+        <p>Sign in to manage donations, pickups, and volunteers.</p>
+      </div>
+
+      <form id="loginForm" autocomplete="on" novalidate>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input id="email" type="email" required placeholder="you@domain.com" autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="password-wrapper">
+            <input id="password" type="password" required placeholder="Enter your password" autocomplete="current-password" />
+            <button type="button" class="password-toggle" onclick="togglePassword('password')" aria-label="Toggle password">👁️</button>
+          </div>
+        </div>
+
+        <div id="errorMessage" class="error" role="alert" aria-live="polite"></div>
+
+        <div class="actions">
+          <button class="btn primary" type="submit">Login to Dashboard</button>
+          <button class="btn ghost" type="button" onclick="location.href='register.html'">Create account</button>
+        </div>
+
+        <div class="note">Forgot your password? Use the Register page to create or reset an account (you can later add reset flow).</div>
+      </form>
+
+      <div class="footer" aria-hidden="true">
+        <div>© Plate to Heart</div>
+        <div style="color:var(--muted)">Made with ♥︎</div>
+      </div>
     </div>
   </div>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDK (kept original auth imports and flow) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } 
-      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // Firebase config (same as your register page)
     const firebaseConfig = {
       apiKey: "AIzaSyCayftL5J0J8tU227qDL1cguBTkfXtj4Fg",
       authDomain: "plate-to-heart-30bd2.firebaseapp.com",
@@ -203,7 +239,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Handle login
+    // keep exactly your original logic and error behaviour
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('email').value.trim();
@@ -212,18 +248,18 @@
 
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        // Redirect to dashboard
+        // redirect to dashboard (Core.html)
         window.location.href = "Core.html";
       } catch (error) {
         errorDiv.style.display = 'block';
-        errorDiv.textContent = error.message;
+        errorDiv.textContent = error.message || 'Login failed';
         document.getElementById('password').value = '';
         document.getElementById('password').focus();
-        setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
+        setTimeout(() => { errorDiv.style.display = 'none'; }, 5500);
       }
     });
 
-    // Toggle password visibility
+    // password toggle (keeps the same behavior)
     window.togglePassword = function(inputId) {
       const input = document.getElementById(inputId);
       const toggle = input.nextElementSibling;
