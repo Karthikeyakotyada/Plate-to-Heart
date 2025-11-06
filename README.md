@@ -20,8 +20,11 @@
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: radial-gradient(1000px 600px at 10% 10%, rgba(0, 123, 98, 0.08), transparent), linear-gradient(180deg, #071018, #09141b);
-      color: var(--text);
+      color: #e6eef3;
+      background:
+        linear-gradient(180deg, rgba(7,16,24,0.9), rgba(9,20,27,0.94)),
+        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat;
+      background-attachment: fixed;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -170,16 +173,7 @@
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="brand">
-      <div class="logo">🍽</div>
-      <div>Plate to Heart</div>
-    </div>
-    <div style="display:flex;gap:10px;align-items:center">
-      <input id="globalSearch" placeholder="Search..." style="padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03);color:var(--text)" />
-      <button class="btn outline" onclick="exportData()">Export</button>
-    </div>
-  </div>
+  <div class="topbar">🍽 Plate to Heart</div>
 
   <div class="wrap">
     <aside class="sidebar">
@@ -523,4 +517,3 @@
   </script>
 </body>
 </html>
-
